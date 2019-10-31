@@ -1,7 +1,6 @@
 package stringSearcher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -21,8 +20,6 @@ public class BoyerMooreSearcher extends StringSearcher {
     public int occursIn(char[] superstring) throws NotFound {
         generateNegativeShiftTable();
         generateGoodSuffixTable();
-        negativeShift.forEach((key, value) -> System.out.println("char: " + key + "list: " + Arrays.toString(value)));
-        System.out.println("Good suffix: " + Arrays.toString(goodSuffixLocations));
         boolean found = false;
         int offset = 0;
         while (!found && offset <= (superstring.length - getString().length)) {
@@ -35,7 +32,7 @@ public class BoyerMooreSearcher extends StringSearcher {
                     } else {
                         neg = negativeShift.get('0')[i];
                     }
-                    int good = checkGoodSuffix(i);
+                    int good = (i < getString().length-1) ? checkGoodSuffix(i+1) : 0;
                     offset += ((neg > good) ? neg : good);
                     break;
                 } else {
@@ -76,7 +73,6 @@ public class BoyerMooreSearcher extends StringSearcher {
             }
             negativeShift.put(c, locations);
         }
-
         Integer[] locations = new Integer[getString().length]; //create wildcard array
         for (int i = 0; i < getString().length; i++) {
             locations[i] = i + 1;
@@ -91,8 +87,6 @@ public class BoyerMooreSearcher extends StringSearcher {
         int subString = string.length() - 1;
         for (int i = string.length() - 1; i >= 0; i--) {
             String current = string.substring(0, i); //current substring to check
-            System.out.println("current: " + current);
-            System.out.println("sub: " + string.substring(subString));
             int lastIndexOf = current.lastIndexOf(string.substring(subString));
             if (lastIndexOf != -1) { //lastIndexOf returns -1 if the string doesn't contain the substring
                 goodSuffixLocations[i] = subString - lastIndexOf;
