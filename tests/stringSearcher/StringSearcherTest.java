@@ -24,6 +24,11 @@ abstract class StringSearcherTest {
     }
 
     @Test
+    void testAbbaabba() throws NotFound{
+        assertEquals( 12, test("abbaabba", "bbbaababaaababbaabbabbaa"));
+    }
+
+    @Test
     void testCap() throws NotFound {
         assertEquals(6,test("cap","The incapable captain capsized the boat"));
     }

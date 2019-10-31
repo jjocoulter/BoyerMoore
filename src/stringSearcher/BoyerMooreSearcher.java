@@ -1,6 +1,7 @@
 package stringSearcher;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class BoyerMooreSearcher extends StringSearcher {
     public int occursIn(char[] superstring) throws NotFound {
         generateNegativeShiftTable();
         generateGoodSuffixTable();
+        negativeShift.forEach((key, value) -> System.out.println("char: " + key + "list: " + Arrays.toString(value)));
+        System.out.println("Good suffix: " + Arrays.toString(goodSuffixLocations));
         boolean found = false;
         int offset = 0;
         while (!found && offset <= (superstring.length - getString().length)) {
@@ -88,6 +91,8 @@ public class BoyerMooreSearcher extends StringSearcher {
         int subString = string.length() - 1;
         for (int i = string.length() - 1; i >= 0; i--) {
             String current = string.substring(0, i); //current substring to check
+            System.out.println("current: " + current);
+            System.out.println("sub: " + string.substring(subString));
             int lastIndexOf = current.lastIndexOf(string.substring(subString));
             if (lastIndexOf != -1) { //lastIndexOf returns -1 if the string doesn't contain the substring
                 goodSuffixLocations[i] = subString - lastIndexOf;
