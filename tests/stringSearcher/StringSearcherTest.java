@@ -1,5 +1,6 @@
 package stringSearcher;
 
+import arrayGenerator.CharacterArrayGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 abstract class StringSearcherTest {
 
     abstract StringSearcher getSearcher(String string);
+    private CharacterArrayGenerator generator = new CharacterArrayGenerator();
 
     private int test(String substring,String superstring) throws NotFound {
         return getSearcher(substring).occursIn(superstring);
@@ -36,5 +38,11 @@ abstract class StringSearcherTest {
     @Test
     void testCab() {
         assertThrows(NotFound.class,()->test("absent","The can sent a message to base"));
+    }
+
+    @Test
+    void testNotFound(){
+        assertThrows(NotFound.class, ()->test(generator.getArray(6).toString(),
+                generator.getArray(1000).toString()));
     }
 }

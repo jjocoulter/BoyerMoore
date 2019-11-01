@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * Implements the Boyer Moore search algorithm.
+ *
+ * @author Josh Coulter
+ * @version 31/10/2019
+ */
 public class BoyerMooreSearcher extends StringSearcher {
 
     private Hashtable<Character, Integer[]> negativeShift = new Hashtable<>();
@@ -17,6 +23,13 @@ public class BoyerMooreSearcher extends StringSearcher {
         super(string);
     }
 
+    /**
+     * Does the substring occur in the superstring?
+     *
+     * @param superstring the superstring to be searched
+     * @return the index of the leftmost occurrence of the substring in the superstring, if there is such an occurrence
+     * @throws NotFound if the substring does not occur in the superstring
+     */
     public int occursIn(char[] superstring) throws NotFound {
         generateNegativeShiftTable();
         generateGoodSuffixTable();
@@ -48,7 +61,16 @@ public class BoyerMooreSearcher extends StringSearcher {
 
     }
 
+    /**
+     * Generate the negative shift hash table for all unique characters and the wildcard.
+     */
     private void generateNegativeShiftTable() {
+        /**
+         * Find all unique characters in the substring and create a separate array in the hashtable based on where the
+         * next element of this character is in the substring.
+         * Create a wildcard element ('0') to account for the given character in the superstring not being present in
+         * the substring.
+         */
         List<Character> uniqueChars = new ArrayList<>();
         for (char c : getString()) { //generate list of all unique chars
             if (!uniqueChars.contains(c)) uniqueChars.add(c);
@@ -80,7 +102,14 @@ public class BoyerMooreSearcher extends StringSearcher {
         negativeShift.put('0', locations);
     }
 
+    /**
+     * Generate the good suffix table for the given substring.
+     */
     private void generateGoodSuffixTable() {
+        /**
+         * Use the substring to calculate the best movement amounts from an increasing substring length (starting from
+         * right hand element).
+         */
         String string = new String(getString()); //convert substring char[] to string
         goodSuffixLocations = new Integer[string.length()];
         int bestMove = 0;
@@ -98,10 +127,21 @@ public class BoyerMooreSearcher extends StringSearcher {
         }
     }
 
+    /**
+     * Check the movement from using the negative shift table.
+     * @param c the current character in the superstring (or wildcard if it doesn't exist in substring)
+     * @param pos the position being checked in the substring
+     * @return the movement amount from the hashtable
+     */
     private int checkNegativeShift(char c, int pos) {
         return negativeShift.get(c)[pos];
     }
 
+    /**
+     * Check the movement from using the good suffix table.
+     * @param pos the current position being checked in the substring
+     * @return the movement amount from the suffix table
+     */
     private int checkGoodSuffix(int pos) {
         return goodSuffixLocations[pos];
     }
